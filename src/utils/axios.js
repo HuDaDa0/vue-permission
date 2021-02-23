@@ -6,7 +6,8 @@ import axios from "axios";
 class Http {
   constructor() {
     this.timeout = 3000;
-    this.baseURL = process.env.NODE_ENV === "development" ? "" : "";
+    this.baseURL =
+      process.env.NODE_ENV === "development" ? "http://localhost:3000" : "/";
   }
 
   mergeOption(options) {

@@ -1,16 +1,30 @@
 <template>
   <div>
-    <el-carousel trigger="click" height="250px">
-      <el-carousel-item v-for="item in 4" :key="item">
-        <h3 class="small">{{ item }}</h3>
+    <el-carousel trigger="click" height="350px">
+      <el-carousel-item v-for="item in bannerList" :key="item.id">
+        <el-image :src="item.img" fit="scale-down"></el-image>
       </el-carousel-item>
     </el-carousel>
   </div>
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
+
 export default {
-  name: "Home"
+  name: "Home",
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapState(["bannerList"])
+  },
+  mounted() {
+    this.getBannerList();
+  },
+  methods: {
+    ...mapActions(["getBannerList"])
+  }
 };
 </script>
 
