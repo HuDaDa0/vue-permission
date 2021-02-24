@@ -20,7 +20,7 @@ export default {
     ...mapState(["bannerList"])
   },
   mounted() {
-    if (this.bannerList.length) {
+    if (this.bannerList.length === 0) {
       this.getBannerList();
     }
   },
