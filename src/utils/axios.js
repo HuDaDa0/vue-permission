@@ -1,5 +1,7 @@
 import axios from "axios";
 
+import store from "../store";
+
 // 封装公共的拦截器   每个实例都有单独自己的拦截器
 
 // http://www.fullstackjavascript.cn:8888
@@ -8,6 +10,8 @@ class Http {
     this.timeout = 3000;
     this.baseURL =
       process.env.NODE_ENV === "development" ? "http://localhost:3000" : "/";
+
+    this.queue = {}; // 存放所有的请求队列     /getBannerList : true
   }
 
   mergeOption(options) {
@@ -18,13 +22,27 @@ class Http {
     };
   }
 
-  setInterceptors(axiosInstance) {
+  setInterceptors(axiosInstance, url) {
+    // 每条请求都会走这个拦截器函数   缓存 url
     axiosInstance.interceptors.request.use(config => {
+      // 记录每次请求的 url 方便取消请求
+      this.queue[url] = true;
+
+      const CancelToken = axios.CancelToken;
+      // let cancel = null;
+
+      config.cancelToken = new CancelToken(function executor(c) {
+        // cancel = c;
+        store.commit("SET_REQUEST_TOKEN", c);
+      });
+
       return config;
     });
 
+    // 请求完成， delete this.queue[url]  从队列中删除url
     axiosInstance.interceptors.response.use(
       res => {
+        delete this.queue[url];
         if (res.status == 200) {
           if (res.data.err == 1) {
             return Promise.reject(res.data.msg);
@@ -35,6 +53,7 @@ class Http {
         }
       },
       err => {
+        delete this.queue[url];
         return Promise.reject(err);
       }
     );
@@ -43,7 +62,7 @@ class Http {
   request(options) {
     const opts = this.mergeOption(options);
     const axiosInstance = axios.create();
-    this.setInterceptors(axiosInstance);
+    this.setInterceptors(axiosInstance, opts.url);
     return axiosInstance(opts);
   }
 

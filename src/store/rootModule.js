@@ -2,11 +2,19 @@ import { getBannerList } from "@/api/public";
 
 export default {
   state: {
-    bannerList: []
+    bannerList: [],
+    ajaxTokens: []
   },
   mutations: {
-    SET_BANNERLIST(state, playlod) {
-      state.bannerList = playlod;
+    SET_BANNERLIST(state, payload) {
+      state.bannerList = payload;
+    },
+    SET_REQUEST_TOKEN(state, payload) {
+      if (payload === "clear") {
+        state.ajaxTokens = [];
+      } else {
+        state.ajaxTokens = [...state.ajaxTokens, payload];
+      }
     }
   },
   actions: {
