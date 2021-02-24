@@ -33,6 +33,9 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from "vuex";
+const { mapActions } = createNamespacedHelpers("user");
+
 export default {
   name: "Login",
   data() {
@@ -48,10 +51,16 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["login"]),
     submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate(async valid => {
         if (valid) {
-          alert("submit!");
+          try {
+            await this.login({ ...this.ruleForm });
+            this.$router.push("/");
+          } catch (e) {
+            this.$message.error(e);
+          }
         } else {
           console.log("error submit!!");
           return false;

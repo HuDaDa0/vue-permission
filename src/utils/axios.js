@@ -27,11 +27,11 @@ class Http {
       res => {
         if (res.status == 200) {
           if (res.data.err == 1) {
-            return Promise.reject(res.data);
+            return Promise.reject(res.data.msg);
           }
           return Promise.resolve(res.data);
         } else {
-          return Promise.reject(res);
+          return Promise.reject(res.data.msg);
         }
       },
       err => {

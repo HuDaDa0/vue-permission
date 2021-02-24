@@ -23,11 +23,15 @@
           active-text-color="#1890FF"
           style="display: flex; justify-content: flex-end;"
         >
-          <el-menu-item index="/login">登录</el-menu-item>
-          <el-menu-item index="/reg">注册</el-menu-item>
-          <el-submenu v-if="false">
-            <template slot="title">用户名</template>
-            <el-menu-item index="/logout">退出登录</el-menu-item>
+          <template v-if="!hasPermission">
+            <el-menu-item index="/login">登录</el-menu-item>
+            <el-menu-item index="/reg">注册</el-menu-item>
+          </template>
+          <el-submenu v-else index="profile">
+            <template slot="title">{{ userInfo.name }}</template>
+            <el-menu-item @click="handleLogout">
+              退出登录
+            </el-menu-item>
           </el-submenu>
         </el-menu>
       </el-col>
@@ -36,8 +40,20 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from "vuex";
+const { mapState, mapActions } = createNamespacedHelpers("user");
+
 export default {
-  name: "Header"
+  name: "Header",
+  computed: {
+    ...mapState(["userInfo", "hasPermission"])
+  },
+  methods: {
+    ...mapActions(["logout"]),
+    handleLogout() {
+      this.logout();
+    }
+  }
 };
 </script>
 
