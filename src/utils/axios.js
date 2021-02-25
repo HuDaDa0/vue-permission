@@ -25,7 +25,8 @@ class Http {
   setInterceptors(axiosInstance, url) {
     // 每条请求都会走这个拦截器函数   缓存 url
     axiosInstance.interceptors.request.use(config => {
-      // 记录每次请求的 url 方便取消请求
+      // 记录每次请求的 url 方便做全局loading效果
+      // 只有 this.queue.length ==== 0 的时候，说明开始发起请求，弹出全局loading
       this.queue[url] = true;
 
       const CancelToken = axios.CancelToken;
@@ -33,6 +34,7 @@ class Http {
 
       config.cancelToken = new CancelToken(function executor(c) {
         // cancel = c;
+        // 保存每次请求的cancelToken  这样在切换页面的时候，就是执行这些 cancel 回调函数了
         store.commit("SET_REQUEST_TOKEN", c);
       });
 
