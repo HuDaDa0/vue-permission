@@ -46,6 +46,7 @@ export default {
         commit("SET_PERMISSION", true);
       } catch (e) {
         commit("SET_USER", {});
+        commit("SET_PERMISSION", false);
       }
     }
   }
