@@ -7,3 +7,7 @@ export const getBannerList = () => {
 export const login = options => {
   return axios.post("/users/login", options);
 };
+
+export const validate = () => {
+  return axios.get("/users/validate");
+};

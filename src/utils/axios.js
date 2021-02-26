@@ -38,6 +38,9 @@ class Http {
         store.commit("SET_REQUEST_TOKEN", c);
       });
 
+      // 每次请求都要携带 token
+      config.headers.Authorization = "Bearer " + localStorage.getItem("token");
+
       return config;
     });
 

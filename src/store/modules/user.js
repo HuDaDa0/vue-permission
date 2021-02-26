@@ -1,4 +1,4 @@
-import { login } from "@/api/public";
+import { login, validate } from "@/api/public";
 
 export default {
   state: {
@@ -8,6 +8,9 @@ export default {
   mutations: {
     SET_USER(state, payload) {
       state.userInfo = payload;
+      if (state.userInfo && state.userInfo.token) {
+        localStorage.setItem("token", state.userInfo.token);
+      }
     },
     SET_PERMISSION(state, has) {
       state.hasPermission = has;
@@ -15,6 +18,7 @@ export default {
     SET_LOGOUT(state) {
       state.userInfo = {};
       state.hasPermission = false;
+      localStorage.removeItem("token");
     }
   },
   actions: {
@@ -32,6 +36,17 @@ export default {
     },
     logout({ commit }) {
       commit("SET_LOGOUT");
+    },
+    async setUserValidate({ commit }) {
+      // 页面每次刷新 或者 进入下一个页面，就会验证一次用户是否登录
+      if (!localStorage.getItem("token")) return false;
+      try {
+        const result = await validate();
+        commit("SET_USER", result.user);
+        commit("SET_PERMISSION", true);
+      } catch (e) {
+        commit("SET_USER", {});
+      }
     }
   }
 };

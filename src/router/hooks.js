@@ -7,5 +7,10 @@ export default {
     store.state.ajaxTokens.forEach(fn => fn());
     store.commit("SET_REQUEST_TOKEN", "clear");
     next();
+  },
+  loginPermission: async function(to, from, next) {
+    // 返回的结果存放到 vuex 中
+    await store.dispatch("user/setUserValidate");
+    next();
   }
 };
