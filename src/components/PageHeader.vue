@@ -29,6 +29,7 @@
           </template>
           <el-submenu v-else index="profile">
             <template slot="title">{{ userInfo.name }}</template>
+            <el-menu-item index="/manager">管理页面</el-menu-item>
             <el-menu-item @click="handleLogout">
               退出登录
             </el-menu-item>

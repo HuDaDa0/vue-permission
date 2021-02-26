@@ -4,6 +4,7 @@ import VueRouter from "vue-router";
 import HomeRoutes from "./routers/home.router";
 import ArticleRoutes from "./routers/article.router";
 import UserRoutes from "./routers/user.router";
+import ManagerRoutes from "./routers/mannger.router";
 
 import hooks from "./hooks";
 
@@ -17,7 +18,13 @@ const routes = [
   // },
   ...HomeRoutes,
   ...ArticleRoutes,
-  ...UserRoutes
+  ...UserRoutes,
+  {
+    path: "/manager",
+    name: "manager",
+    component: () => import("@/views/Manager/index.vue"),
+    children: [...ManagerRoutes]
+  }
 
   // {
   //   path: "/about",
