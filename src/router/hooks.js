@@ -27,5 +27,15 @@ export default {
       }
       next();
     }
+  },
+  menuPermission: function(to, from, next) {
+    if (store.state.user.hasPermission) {
+      if (!store.state.user.menuPermission) {
+        store.dispatch("user/setRoute");
+        next({ ...to, replace: true });
+      }
+      next();
+    }
+    next();
   }
 };

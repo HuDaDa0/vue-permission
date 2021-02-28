@@ -1,9 +1,29 @@
+import router from "@/router";
+
 import { login, validate } from "@/api/public";
+import managerRoutes from "@/router/routers/manager";
+
+function filterRouter(authList) {
+  let auths = authList.map(item => item.auth);
+  const filter = authRoutes => {
+    let result = authRoutes.filter(route => {
+      if (auths.includes(route.meta.auth)) {
+        if (route.children) {
+          route.children = filter(route.children);
+        }
+        return route;
+      }
+    });
+    return result;
+  };
+  return filter(managerRoutes);
+}
 
 export default {
   state: {
     userInfo: {},
-    hasPermission: false
+    hasPermission: false,
+    menuPermission: false
   },
   mutations: {
     SET_USER(state, payload) {
@@ -19,6 +39,9 @@ export default {
       state.userInfo = {};
       state.hasPermission = false;
       localStorage.removeItem("token");
+    },
+    SET_MENU_PERMISSION(state, has) {
+      state.menuPermission = has;
     }
   },
   actions: {
@@ -48,6 +71,20 @@ export default {
         commit("SET_USER", {});
         commit("SET_PERMISSION", false);
       }
+    },
+    setRoute({ commit, state }) {
+      let authList = state.userInfo.authList;
+
+      if (authList) {
+        // 开始规划路由
+        let routes = filterRouter(authList);
+        let route = router.options.routes.find(
+          item => item.path === "/manager"
+        );
+        route.children = routes;
+        router.addRoutes([route]);
+      }
+      commit("SET_MENU_PERMISSION", true);
     }
   }
 };

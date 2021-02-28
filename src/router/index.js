@@ -4,7 +4,7 @@ import VueRouter from "vue-router";
 import HomeRoutes from "./routers/home.router";
 import ArticleRoutes from "./routers/article.router";
 import UserRoutes from "./routers/user.router";
-// import ManagerRoutes from "./routers/mannger.router";
+// import ManagerRoutes from "./routers/manager";
 
 import hooks from "./hooks";
 
@@ -19,12 +19,12 @@ const routes = [
     name: "manager",
     component: () => import("@/views/Manager/index.vue")
     // children: [...ManagerRoutes]
-  },
-  {
-    path: "*",
-    name: "404",
-    component: () => import("@/views/404.vue")
   }
+  // {
+  //   path: "*",
+  //   name: "page404",
+  //   component: () => import("@/views/Page404.vue")
+  // }
 
   // {
   //   path: "/about",
