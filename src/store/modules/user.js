@@ -23,7 +23,8 @@ export default {
   state: {
     userInfo: {},
     hasPermission: false,
-    menuPermission: false
+    menuPermission: false,
+    btnPermission: { edit: true, delete: false }
   },
   mutations: {
     SET_USER(state, payload) {

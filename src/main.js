@@ -10,6 +10,15 @@ Vue.config.productionTip = false;
 
 Vue.use(ElementUI);
 
+Vue.directive("has", {
+  inserted(el, binding) {
+    const exists = store.state.user.btnPermission[binding.value];
+    if (!exists) {
+      el.parentNode.removeChild(el);
+    }
+  }
+});
+
 new Vue({
   router,
   store,
